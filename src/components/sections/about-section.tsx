@@ -21,21 +21,18 @@ export function AboutSection() {
             className="space-y-4 text-zinc-600 dark:text-zinc-400"
           >
             <p>
-              I'm a software engineer with experience building products
-              across the full stack. I specialize in creating performant,
-              accessible, and user-friendly applications using modern
-              technologies.
+              I'm a Computer Science student at Vignan's Foundation for Science, Technology and Research, Vadlamudi, Guntur Dist. 
+              with a passion for building scalable, maintainable, and user-focused software products. 
+              My CGPA is 7.35/10.
             </p>
             <p>
-              My approach combines strong technical fundamentals with product
-              thinking — I don't just write code, I solve problems. Every
-              project I build is an opportunity to learn, optimize, and deliver
-              real value.
+              I specialize in full-stack development with expertise in Python, JavaScript, React, and cloud technologies. 
+              I've completed an AWS internship at SkillCraft Technology and built multiple projects including a Grocery Flask Application, 
+              TypeScript Command Center, and QUO-RION analytics platform.
             </p>
             <p>
-              When I'm not coding, you'll find me writing technical
-              blog posts, contributing to open-source projects, or exploring new
-              technologies.
+              My areas of interest include Web Development, UI-UX Design, Mobile Application Development, and Cloud Security. 
+              I'm also an On Stage Events Lead at Mahostav 2024.
             </p>
           </motion.div>
 
@@ -51,11 +48,11 @@ export function AboutSection() {
                 Quick Facts
               </h3>
               <ul className="mt-3 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
-                <li>📍 Based in San Francisco, CA</li>
-                <li>💼 Senior Software Engineer</li>
-                <li>🎓 B.S. Computer Science</li>
-                <li>📚 Lifelong learner</li>
-                <li>🌐 Open-source advocate</li>
+                <li>📍 Vignan's Foundation, Vadlamudi, Guntur</li>
+                <li>💼 B.Tech CSE Student (2023-Present)</li>
+                <li>🎓 CGPA: 7.35/10</li>
+                <li>� +91-9490339137</li>
+                <li>🌐 AWS Certified Intern</li>
               </ul>
             </div>
 
@@ -65,9 +62,10 @@ export function AboutSection() {
               </h3>
               <ul className="mt-3 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
                 <li>🎯 Simplicity before complexity</li>
-                <li>⚡ Performance over unnecessary abstraction</li>
+                <li>⚡ Performance and scalability</li>
                 <li>♿ Accessibility by default</li>
-                <li>📝 Clean code is a feature</li>
+                <li>📝 Clean, maintainable code</li>
+                <li>💡 Problem-solving mindset</li>
               </ul>
             </div>
           </motion.div>

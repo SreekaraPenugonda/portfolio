@@ -1,17 +1,17 @@
 import { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
-  name: "Sreekara Penugonda",
-  tagline: "Software Engineer & Product Builder",
+  name: "Penugonda Sreekara Venkata Naga Durga Sai Uday",
+  tagline: "Software Engineer | Cloud Enthusiast | Problem Solver",
   description:
-    "Portfolio of Sreekara Penugonda — a software engineer specializing in building scalable, maintainable, and user-focused software products.",
+    "Portfolio of Penugonda Sreekara Venkata Naga Durga Sai Uday — a Computer Science student specializing in full-stack development, cloud computing, and building scalable solutions.",
   url: "https://sreekara.dev",
   ogImage: "/og-image.png",
   links: {
     github: "https://github.com/SreekaraPenugonda",
     linkedin: "https://www.linkedin.com/in/sreekara-penugonda-882965302",
     twitter: "https://twitter.com/sreekara",
-    email: "hello@sreekara.dev",
+    email: "231fa04970@gmail.com",
     leetcode: "https://leetcode.com/u/Sreekara_Penugonda/",
   },
   navLinks: [
@@ -23,14 +23,14 @@ export const siteConfig: SiteConfig = {
     { label: "Resume", href: "/resume" },
   ],
   github: {
-    username: "sreekara",
+    username: "SreekaraPenugonda",
     totalRepos: 24,
     totalStars: 1042,
     totalContributions: 1847,
     topLanguages: ["TypeScript", "JavaScript", "Python", "Java", "Go"],
   },
   leetcode: {
-    username: "sreekara",
+    username: "Sreekara_Penugonda",
     totalSolved: 286,
     totalProblems: 350,
     ranking: 48231,

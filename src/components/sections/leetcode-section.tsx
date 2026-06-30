@@ -6,14 +6,36 @@ import { siteConfig } from "@/lib/site-config";
 import { Badge } from "@/components/ui/badge";
 import { Code, Trophy, Target, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { getLeetCodeStats } from "@/lib/api/leetcode";
 
 export function LeetCodeSection() {
-  const { leetcode } = siteConfig;
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(`/api/leetcode?username=${siteConfig.leetcode.username}`);
+        const data = await response.json();
+        
+        if (data.stats) {
+          setStats(data.stats);
+        }
+      } catch (error) {
+        console.error('Error fetching LeetCode data:', error);
+      }
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
+  const leetcode = stats || siteConfig.leetcode;
   const solvedPercent = Math.round(
     (leetcode.totalSolved / leetcode.totalProblems) * 100
   );
 
-  const stats = [
+  const statCards = [
     {
       icon: Code,
       label: "Problems Solved",
@@ -40,21 +62,21 @@ export function LeetCodeSection() {
   const difficulties = [
     {
       label: "Easy",
-      solved: leetcode.byDifficulty.easy,
+      solved: leetcode.byDifficulty?.easy || leetcode.easy || 120,
       total: 200,
       color: "bg-emerald-500",
       bg: "bg-emerald-100 dark:bg-emerald-950",
     },
     {
       label: "Medium",
-      solved: leetcode.byDifficulty.medium,
+      solved: leetcode.byDifficulty?.medium || leetcode.medium || 140,
       total: 400,
       color: "bg-amber-500",
       bg: "bg-amber-100 dark:bg-amber-950",
     },
     {
       label: "Hard",
-      solved: leetcode.byDifficulty.hard,
+      solved: leetcode.byDifficulty?.hard || leetcode.hard || 26,
       total: 200,
       color: "bg-red-500",
       bg: "bg-red-100 dark:bg-red-950",
@@ -70,9 +92,8 @@ export function LeetCodeSection() {
         />
 
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* Stats Cards */}
           <div className="space-y-4">
-            {stats.map((stat, idx) => {
+            {statCards.map((stat, idx) => {
               const Icon = stat.icon;
               return (
                 <motion.div
@@ -108,7 +129,6 @@ export function LeetCodeSection() {
             })}
           </div>
 
-          {/* Difficulty Breakdown */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -163,7 +183,6 @@ export function LeetCodeSection() {
               })}
             </div>
 
-            {/* Summary Badge */}
             <div className="mt-6 flex items-center justify-center">
               <Badge variant="success" className="text-sm px-4 py-1.5">
                 Solved {leetcode.totalSolved} problems total

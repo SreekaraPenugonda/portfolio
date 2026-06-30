@@ -33,36 +33,31 @@ export function ExperienceSection() {
                 <div className="absolute left-2.5 top-1.5 h-3 w-3 rounded-full border-2 border-zinc-300 bg-white dark:border-zinc-600 dark:bg-zinc-900 md:left-6.5" />
 
                 <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/50">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                        {exp.role}
+                        {exp.title}
                       </h3>
                       <p className="text-sm text-zinc-600 dark:text-zinc-400">
                         {exp.company} · {exp.location}
                       </p>
                     </div>
                     <p className="text-sm text-zinc-500 dark:text-zinc-500">
-                      {formatDateShort(exp.startDate)} —{" "}
-                      {exp.endDate ? formatDateShort(exp.endDate) : "Present"}
+                      {exp.period}
                     </p>
                   </div>
 
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    {exp.description}
-                  </p>
-
-                  <ul className="mt-3 space-y-1">
-                    {exp.highlights.map((highlight, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400"
-                      >
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-zinc-400" />
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
+                    <ul className="mt-3 space-y-1">
+                      {exp.description.map((desc, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400"
+                        >
+                          <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-zinc-400" />
+                          {desc}
+                        </li>
+                      ))}
+                    </ul>
 
                   <div className="mt-4 flex flex-wrap gap-2">
                     {exp.technologies.map((tech) => (

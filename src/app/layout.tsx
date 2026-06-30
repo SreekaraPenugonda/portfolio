@@ -4,6 +4,11 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { CustomCursor } from "@/components/ui/custom-cursor";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { ReadingProgress } from "@/components/ui/reading-progress";
+import { SkipLink } from "@/components/ui/skip-link";
+import { StructuredData } from "@/components/ui/structured-data";
 import { siteConfig } from "@/lib/site-config";
 
 const geistSans = Geist({
@@ -86,12 +91,19 @@ export default function RootLayout({
             `,
           }}
         />
+        <StructuredData />
       </head>
       <body className="min-h-screen bg-white font-sans text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
         <ThemeProvider>
+          <SkipLink />
+          <ReadingProgress />
+          <CustomCursor />
+          <CommandPalette />
           <div className="flex min-h-screen flex-col">
             <Navbar />
-            <main className="flex-1 pt-14">{children}</main>
+            <main id="main-content" className="flex-1 pt-14">
+              {children}
+            </main>
             <Footer />
           </div>
         </ThemeProvider>

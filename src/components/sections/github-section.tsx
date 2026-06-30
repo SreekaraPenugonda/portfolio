@@ -6,27 +6,64 @@ import { siteConfig } from "@/lib/site-config";
 import { Code2, Star, GitFork, Activity } from "lucide-react";
 import { SkillIcon } from "@/components/ui/skill-icon";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { getGitHubStats, getGitHubRepos } from "@/lib/api/github";
+
+interface GitHubStats {
+  repos: number;
+  followers: number;
+  following: number;
+}
 
 export function GitHubSection() {
-  const { github } = siteConfig;
+  const [stats, setStats] = useState<GitHubStats | null>(null);
+  const [repos, setRepos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const stats = [
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(`/api/github?username=${siteConfig.github.username}`);
+        const data = await response.json();
+        
+        if (data.stats) {
+          setStats(data.stats);
+        }
+        if (data.repos) {
+          setRepos(data.repos);
+        }
+      } catch (error) {
+        console.error('Error fetching GitHub data:', error);
+      }
+      setLoading(false);
+    }
+    
+    fetchData();
+  }, []);
+
+  const displayStats = stats || {
+    repos: siteConfig.github.totalRepos,
+    followers: 0,
+    following: 0,
+  };
+
+  const statCards = [
     {
       icon: Code2,
       label: "Repositories",
-      value: github.totalRepos,
+      value: displayStats.repos,
       suffix: "+",
     },
     {
       icon: Star,
       label: "Stars Earned",
-      value: github.totalStars,
+      value: repos.reduce((sum, repo) => sum + repo.stars, 0) || siteConfig.github.totalStars,
       suffix: "+",
     },
     {
       icon: GitFork,
       label: "Contributions",
-      value: github.totalContributions,
+      value: siteConfig.github.totalContributions,
       suffix: "+",
     },
   ];
@@ -41,7 +78,7 @@ export function GitHubSection() {
 
         {/* Stats Grid */}
         <div className="grid gap-6 sm:grid-cols-3 mb-12">
-          {stats.map((stat, idx) => {
+          {statCards.map((stat, idx) => {
             const Icon = stat.icon;
             return (
               <motion.div
@@ -104,7 +141,7 @@ export function GitHubSection() {
           </div>
 
           <div className="flex flex-wrap gap-4 justify-center">
-            {github.topLanguages.map((lang, idx) => (
+            {siteConfig.github.topLanguages.map((lang, idx) => (
               <motion.div
                 key={lang}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -148,7 +185,7 @@ export function GitHubSection() {
             ))}
           </div>
           <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500 text-right">
-            {github.totalContributions} contributions in the last year
+            {siteConfig.github.totalContributions} contributions in the last year
           </p>
         </motion.div>
       </div>

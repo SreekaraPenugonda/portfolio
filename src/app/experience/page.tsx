@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { experiences, education, certifications } from "@/data/experience";
-import { formatDateShort } from "@/lib/utils";
 import { GraduationCap, Award } from "lucide-react";
 
 export default function ExperiencePage() {
@@ -32,7 +31,7 @@ export default function ExperiencePage() {
           <div className="relative">
             <div className="absolute left-4 top-0 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 md:left-8" />
             <div className="space-y-8">
-              {experiences.map((exp, idx) => (
+              {experiences.filter(exp => exp.type === "internship" || exp.type === "work").map((exp, idx) => (
                 <motion.div
                   key={exp.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -45,30 +44,24 @@ export default function ExperiencePage() {
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                       <div>
                         <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                          {exp.role}
+                          {exp.title}
                         </h3>
                         <p className="text-sm text-zinc-600 dark:text-zinc-400">
                           {exp.company} · {exp.location}
                         </p>
                       </div>
                       <p className="text-sm text-zinc-500 dark:text-zinc-500">
-                        {formatDateShort(exp.startDate)} —{" "}
-                        {exp.endDate
-                          ? formatDateShort(exp.endDate)
-                          : "Present"}
+                        {exp.period}
                       </p>
                     </div>
-                    <p className="mt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                      {exp.description}
-                    </p>
                     <ul className="mt-3 space-y-1">
-                      {exp.highlights.map((highlight, i) => (
+                      {exp.description.map((desc, i) => (
                         <li
                           key={i}
                           className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400"
                         >
                           <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-zinc-400" />
-                          {highlight}
+                          {desc}
                         </li>
                       ))}
                     </ul>
@@ -104,25 +97,26 @@ export default function ExperiencePage() {
                 <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                      {edu.degree}
+                      {edu.title}
                     </h3>
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {edu.institution} · {edu.location}
+                      {edu.company} · {edu.location}
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
-                    {edu.gpa && (
-                      <Badge variant="success">GPA: {edu.gpa}</Badge>
+                    {edu.description[0]?.includes("CGPA") && (
+                      <Badge variant="success">
+                        {edu.description[0]}
+                      </Badge>
                     )}
                     <span className="text-sm text-zinc-500">
-                      {formatDateShort(edu.startDate)} —{" "}
-                      {formatDateShort(edu.endDate)}
+                      {edu.period}
                     </span>
                   </div>
                 </div>
-                {edu.highlights && (
+                {edu.description.length > 1 && (
                   <ul className="mt-3 space-y-1">
-                    {edu.highlights.map((h, i) => (
+                    {edu.description.slice(1).map((h, i) => (
                       <li
                         key={i}
                         className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400"
@@ -145,22 +139,22 @@ export default function ExperiencePage() {
             Certifications
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {certifications.map((cert, idx) => (
+            {certifications.map((cert) => (
               <motion.div
                 key={cert.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                transition={{ duration: 0.4 }}
                 className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900/50"
               >
                 <h3 className="font-medium text-zinc-900 dark:text-zinc-50 text-sm">
                   {cert.title}
                 </h3>
                 <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                  {cert.issuer}
+                  {cert.company}
                 </p>
                 <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
-                  {formatDateShort(cert.date)}
+                  {cert.period}
                 </p>
               </motion.div>
             ))}

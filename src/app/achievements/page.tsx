@@ -1,11 +1,11 @@
 "use client";
 
-import { InfiniteAchievementGallery } from "@/components/sections/achievements/infinite-gallery";
+import { CertificationGallery } from "@/components/sections/achievements/certification-gallery";
 
 export default function AchievementsPage() {
   return (
     <div className="min-h-screen pt-14">
-      <InfiniteAchievementGallery />
+      <CertificationGallery />
     </div>
   );
 }
