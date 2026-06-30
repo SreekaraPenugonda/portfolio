@@ -1,8 +1,8 @@
 import { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
-  name: "Penugonda Sreekara Venkata Naga Durga Sai Uday",
-  tagline: "Software Engineer | Cloud Enthusiast | Problem Solver",
+  name: "SREEKARA PENUGONDA",
+  tagline: "Software Engineer & Builder | Designing | Problem Solver",
   description:
     "Portfolio of Penugonda Sreekara Venkata Naga Durga Sai Uday — a Computer Science student specializing in full-stack development, cloud computing, and building scalable solutions.",
   url: "https://sreekara.dev",

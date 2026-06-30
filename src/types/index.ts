@@ -5,19 +5,19 @@
 export interface Project {
   id: string;
   title: string;
-  tagline: string;
+  tagline?: string;
   description: string;
   longDescription: string;
-  category: ProjectCategory;
+  category?: ProjectCategory;
   technologies: string[];
-  image: string;
+  image?: string;
   images?: string[];
   liveUrl?: string;
   sourceUrl?: string;
   caseStudy?: string;
   featured: boolean;
   date: string;
-  highlights: string[];
+  highlights?: string[];
   architecture?: string;
   keyLearnings?: string[];
 }
