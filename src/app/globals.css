@@ -22,144 +22,175 @@ body {
   color: var(--foreground);
 }
 
-/* Smooth scroll behavior */
+/* ── Smooth scroll ──────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
+/* ── Custom scrollbar ───────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #a1a1aa; border-radius: 4px; }
+.dark ::-webkit-scrollbar-thumb { background: #52525b; }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* ── Focus ──────────────────────────────────────── */
+*:focus-visible { outline: 2px solid #18181b; outline-offset: 2px; }
+.dark *:focus-visible { outline-color: #fafafa; }
 
-::-webkit-scrollbar-thumb {
-  background: #a1a1aa;
-  border-radius: 4px;
-}
+/* ── Selection ──────────────────────────────────── */
+::selection { background: #18181b; color: #fafafa; }
+.dark ::selection { background: #fafafa; color: #18181b; }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #52525b;
-}
-
-/* Focus visible styles */
-*:focus-visible {
-  outline: 2px solid #18181b;
-  outline-offset: 2px;
-}
-
-.dark *:focus-visible {
-  outline-color: #fafafa;
-}
-
-/* Selection styles */
-::selection {
-  background: #18181b;
-  color: #fafafa;
-}
-
-.dark ::selection {
-  background: #fafafa;
-  color: #18181b;
-}
-
-/* Gradient text effect */
+/* ── Gradient text ──────────────────────────────── */
 .gradient-text {
   background: linear-gradient(135deg, #18181b 0%, #71717a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-
 .dark .gradient-text {
   background: linear-gradient(135deg, #fafafa 0%, #a1a1aa 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-background-clip: text; background-clip: text;
 }
 
-/* Glassmorphism */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
+/* ── Glassmorphism ──────────────────────────────── */
+.glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
+.dark .glass { background: rgba(9,9,11,0.7); border: 1px solid rgba(255,255,255,0.1); }
 
-.dark .glass {
-  background: rgba(9, 9, 11, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Page transition animation */
-.page-transition {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
+/* ── Page transition ────────────────────────────── */
+.page-transition { animation: fadeIn 0.3s ease-in-out; }
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Hide custom cursor on touch devices */
-@media (pointer: coarse) {
-  * {
-    cursor: auto !important;
-  }
+/* ── Shimmer loading ────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #f4f4f5 25%, #e4e4e7 50%, #f4f4f5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+.dark .shimmer {
+  background: linear-gradient(90deg, #27272a 25%, #3f3f46 50%, #27272a 75%);
+  background-size: 200% 100%;
 }
 
-/* ── Print styles for /resume page ─────────────────────────────── */
+/* ── Gradient border animation ──────────────────── */
+@keyframes gradient-border {
+  0%, 100% { border-color: rgba(59,130,246,0.3); }
+  25% { border-color: rgba(16,185,129,0.3); }
+  50% { border-color: rgba(139,92,246,0.3); }
+  75% { border-color: rgba(245,158,11,0.3); }
+}
+.animate-border { animation: gradient-border 4s ease-in-out infinite; }
+
+/* ── Ripple effect ──────────────────────────────── */
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
+.ripple-effect {
+  position: absolute; border-radius: 50%; background: rgba(255,255,255,0.3);
+  transform: scale(0); animation: ripple 0.6s linear; pointer-events: none;
+}
+
+/* ── Float animation ────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float { animation: float 3s ease-in-out infinite; }
+
+/* ── Pulse glow ─────────────────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(59,130,246,0.3); }
+  50% { box-shadow: 0 0 20px rgba(59,130,246,0.5); }
+}
+.animate-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+/* ── Scale reveal ───────────────────────────────── */
+@keyframes scale-reveal {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.animate-scale-reveal { animation: scale-reveal 0.4s ease-out; }
+
+/* ── Slide up ───────────────────────────────────── */
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up { animation: slide-up 0.4s ease-out; }
+
+/* ── Typewriter cursor ──────────────────────────── */
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.typewriter-cursor::after {
+  content: "|"; animation: blink 1s step-end infinite;
+  color: #3b82f6; margin-left: 2px;
+}
+
+/* ── Counter animation ──────────────────────────── */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-count { animation: count-up 0.6s ease-out; }
+
+/* ── Tooltip ────────────────────────────────────── */
+.tooltip-content {
+  visibility: hidden; opacity: 0; transition: opacity 0.2s, visibility 0.2s;
+}
+.tooltip-trigger:hover .tooltip-content {
+  visibility: visible; opacity: 1;
+}
+
+/* ── Progress bar ───────────────────────────────── */
+@keyframes progress-fill {
+  from { width: 0; }
+  to { width: var(--progress-width); }
+}
+.animate-progress { animation: progress-fill 1s ease-out forwards; }
+
+/* ── Confetti ───────────────────────────────────── */
+@keyframes confetti-fall {
+  0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+.confetti-piece {
+  position: fixed; width: 10px; height: 10px;
+  animation: confetti-fall 3s ease-in forwards;
+}
+
+/* ── Sprinkle particles ─────────────────────────── */
+@keyframes particle-drift {
+  0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-30px) translateX(10px) scale(1.2); opacity: 0.2; }
+  100% { transform: translateY(-60px) translateX(-5px) scale(0.8); opacity: 0; }
+}
+.particle { animation: particle-drift 3s ease-in-out infinite; }
+
+/* ── Sheet slide ────────────────────────────────── */
+@keyframes sheet-in {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-sheet-in { animation: sheet-in 0.3s ease-out; }
+
+/* ── Prevent CLS for grid items ─────────────────── */
+.project-card-grid {
+  content-visibility: auto;
+  contain-intrinsic-size: 400px;
+}
+
+/* ── Hide custom cursor on touch ────────────────── */
+@media (pointer: coarse) { * { cursor: auto !important; } }
+
+/* ── Print styles ───────────────────────────────── */
 @media print {
-  /* Hide everything that's not the resume content */
-  header, footer, nav,
-  .print\:hidden { display: none !important; }
-
-  /* Reset page layout */
-  body {
-    background: #ffffff !important;
-    color: #18181b !important;
-    font-size: 11pt;
-    line-height: 1.5;
-  }
-
-  /* Full width, no padding */
+  header, footer, nav, .print\:hidden { display: none !important; }
+  body { background: #ffffff !important; color: #18181b !important; font-size: 11pt; }
   .mx-auto { max-width: 100% !important; }
-  .px-4, .px-6, .px-8 { padding-left: 0 !important; padding-right: 0 !important; }
-  .py-20 { padding-top: 8pt !important; padding-bottom: 0 !important; }
-
-  /* Remove dark bg classes */
-  .dark\:bg-zinc-900\/50,
-  .dark\:bg-zinc-900,
-  .dark\:bg-zinc-950 { background: transparent !important; }
-
-  /* Borders print cleanly */
-  .rounded-xl, .rounded-2xl { border-radius: 4pt !important; }
-
-  /* Remove shadows */
-  .shadow-2xl, .shadow-lg, .shadow-md { box-shadow: none !important; }
-
-  /* Sidebar hidden on print */
-  .xl\:flex.flex-col.gap-1 { display: none !important; }
-
-  /* Ensure full width for content */
-  .flex-1 { flex: 1 1 100% !important; }
-
-  /* Page breaks */
-  section { page-break-inside: avoid; }
-
-  /* Reduce animation */
   * { animation: none !important; transition: none !important; }
-
-  @page {
-    size: A4;
-    margin: 15mm 15mm 15mm 15mm;
-  }
+  @page { size: A4; margin: 15mm; }
 }

@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import { gsap } from "gsap";
+import { useRef, useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { prefersReducedMotion } from "@/lib/utils";
 
 // Every technology from the resume + projects — with brand colours and SVG-style icons
@@ -12,36 +11,21 @@ const techs = [
   { name: "JavaScript",   icon: "JS", color: "#F7DF1E" },
   { name: "TypeScript",   icon: "TS", color: "#3178C6" },
   { name: "C",            icon: "C",  color: "#A8B9CC" },
-  { name: "HTML",         icon: "HT", color: "#E34F26" },
-  { name: "CSS",          icon: "CS", color: "#1572B6" },
-  { name: "SQL",          icon: "SQL", color: "#CC2927" },
+  { name: "WEB",         icon: "HT", color: "#E34F26" },
   // Frontend
   { name: "React",        icon: "⚛",  color: "#61DAFB" },
-  { name: "Next.js",      icon: "N▲", color: "#ffffff" },
-  { name: "Tailwind",     icon: "TW", color: "#06B6D4" },
-  { name: "Redux",        icon: "Rx", color: "#764ABC" },
   // Backend / Frameworks
-  { name: "Flask",        icon: "🌶", color: "#000000" },
+  { name: "Flask",        icon: "🌶", color: "#b9c219" },
   { name: "Node.js",      icon: "⬡",  color: "#339933" },
   { name: "Express",      icon: "Ex", color: "#888888" },
-  { name: "REST API",     icon: "↔",  color: "#FF6C37" },
+
   // Databases
   { name: "MongoDB",      icon: "🍃", color: "#47A248" },
-  { name: "MySQL",        icon: "MY", color: "#4479A1" },
   { name: "Firebase",     icon: "🔥", color: "#FFCA28" },
-  { name: "SQLite",       icon: "SQ", color: "#003B57" },
   // DevOps / Cloud
   { name: "AWS",          icon: "☁",  color: "#FF9900" },
-  { name: "Docker",       icon: "🐳", color: "#2496ED" },
-  { name: "Kubernetes",   icon: "K8s", color: "#326CE5" },
   { name: "Render",       icon: "▲",  color: "#46E3B7" },
-  { name: "Git",          icon: "GIT", color: "#F05032" },
   { name: "GitHub",       icon: "GH", color: "#ffffff" },
-  // Tools
-  { name: "VS Code",      icon: "⎈",  color: "#007ACC" },
-  { name: "Postman",      icon: "PM", color: "#FF6C37" },
-  { name: "Linux",        icon: "🐧", color: "#FCC624" },
-  { name: "Figma",        icon: "Fg", color: "#F24E1E" },
 ];
 
 function TechBadge({ name, icon, color }: { name: string; icon: string; color: string }) {
@@ -73,7 +57,8 @@ function TechBadge({ name, icon, color }: { name: string; icon: string; color: s
 
 export function TechStrip() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const tweenRef = useRef<gsap.core.Tween | null>(null);
+  const controls = useAnimation();
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (!trackRef.current || prefersReducedMotion()) return;
@@ -89,24 +74,18 @@ export function TechStrip() {
 
     const totalWidth = track.scrollWidth / 2;
 
-    tweenRef.current = gsap.to(track, {
+    // Use Framer Motion instead of gsap
+    controls.start({
       x: -totalWidth,
-      duration: 40,
-      repeat: -1,
-      ease: "linear",
+      transition: {
+        duration: 40,
+        repeat: Infinity,
+        ease: "linear",
+      },
     });
 
-    const pause = () => tweenRef.current?.pause();
-    const play = () => tweenRef.current?.play();
-    track.addEventListener("mouseenter", pause);
-    track.addEventListener("mouseleave", play);
-
-    return () => {
-      tweenRef.current?.kill();
-      track.removeEventListener("mouseenter", pause);
-      track.removeEventListener("mouseleave", play);
-    };
-  }, []);
+    return () => controls.stop();
+  }, [controls]);
 
   return (
     <section
@@ -115,7 +94,7 @@ export function TechStrip() {
     >
       <div className="mb-6 text-center">
         <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
-          Technologies &amp; Tools
+          Technologies & Tools
         </p>
       </div>
 
@@ -126,15 +105,18 @@ export function TechStrip() {
         <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent" />
 
         <div className="overflow-hidden px-20">
-          <div
+          <motion.div
             ref={trackRef}
             className="flex gap-8 items-end"
             style={{ width: "max-content" }}
+            animate={controls}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
             {techs.map((t) => (
               <TechBadge key={t.name} {...t} />
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

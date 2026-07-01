@@ -2,26 +2,7 @@
 // Project Atlas — Type Definitions
 // ============================================
 
-export interface Project {
-  id: string;
-  title: string;
-  tagline?: string;
-  description: string;
-  longDescription: string;
-  category?: ProjectCategory;
-  technologies: string[];
-  image?: string;
-  images?: string[];
-  liveUrl?: string;
-  sourceUrl?: string;
-  caseStudy?: string;
-  featured: boolean;
-  date: string;
-  highlights?: string[];
-  architecture?: string;
-  keyLearnings?: string[];
-}
-
+// ── Project ───────────────────────────────────────────────────────
 export type ProjectCategory =
   | "full-stack"
   | "frontend"
@@ -31,13 +12,25 @@ export type ProjectCategory =
   | "ai-ml"
   | "open-source";
 
-export interface Skill {
-  name: string;
-  category: SkillCategory;
-  level: number; // 0–100
-  icon?: string;
+export interface Project {
+  id: string;
+  slug: string;
+  title: string;
+  tagline?: string;
+  description: string;
+  longDescription: string;
+  category?: ProjectCategory;
+  technologies: string[];
+  liveUrl?: string;
+  sourceUrl: string;
+  featured: boolean;
+  date: string;
+  highlights?: string[];
+  architecture?: string;
+  keyLearnings?: string[];
 }
 
+// ── Skill ─────────────────────────────────────────────────────────
 export type SkillCategory =
   | "languages"
   | "frontend"
@@ -47,38 +40,41 @@ export type SkillCategory =
   | "tools"
   | "soft-skills";
 
+export interface Skill {
+  name: string;
+  category: SkillCategory;
+  level: number;
+  icon?: string;
+}
+
+// ── Experience ────────────────────────────────────────────────────
 export interface Experience {
   id: string;
-  role: string;
+  title: string;
   company: string;
   location: string;
-  startDate: string;
-  endDate: string | null;
-  description: string;
-  highlights: string[];
+  period: string;
+  description: string[];
   technologies: string[];
-}
-
-export interface Education {
-  id: string;
-  degree: string;
-  institution: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  gpa?: string;
+  type: "work" | "internship" | "education";
   highlights?: string[];
+  link?: string;
 }
 
-export interface Certification {
+// ── Achievement ──────────────────────────────────────────────────
+export type AchievementType = "award" | "publication" | "recognition" | "milestone";
+
+export interface Achievement {
   id: string;
   title: string;
-  issuer: string;
+  description: string;
   date: string;
+  type: AchievementType;
   url?: string;
-  credentialId?: string;
+  image?: string;
 }
 
+// ── Blog ──────────────────────────────────────────────────────────
 export interface BlogPost {
   id: string;
   title: string;
@@ -91,28 +87,7 @@ export interface BlogPost {
   readingTime: number;
 }
 
-export interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  type: "award" | "publication" | "recognition" | "milestone";
-  url?: string;
-  image?: string;
-}
-
-export interface NavLink {
-  label: string;
-  href: string;
-  icon?: string;
-}
-
-export interface SocialLink {
-  label: string;
-  url: string;
-  icon: string;
-}
-
+// ── GitHub ────────────────────────────────────────────────────────
 export interface GitHubStats {
   username: string;
   totalRepos: number;
@@ -121,6 +96,30 @@ export interface GitHubStats {
   topLanguages: string[];
 }
 
+export interface GitHubApiResponse {
+  stats: {
+    repos: number;
+    followers: number;
+    following: number;
+    avatar: string | null;
+    bio: string | null;
+    location: string | null;
+  } | null;
+  repos: GitHubRepo[];
+  topLanguages: string[];
+  totalStars: number;
+}
+
+export interface GitHubRepo {
+  name: string;
+  description: string | null;
+  stars: number;
+  forks: number;
+  language: string | null;
+  url: string;
+}
+
+// ── LeetCode ─────────────────────────────────────────────────────
 export interface LeetCodeStats {
   username: string;
   totalSolved: number;
@@ -131,6 +130,30 @@ export interface LeetCodeStats {
     medium: number;
     hard: number;
   };
+}
+
+export interface LeetCodeApiResponse {
+  totalSolved: number;
+  totalProblems: number;
+  ranking: number;
+  byDifficulty: {
+    easy: number;
+    medium: number;
+    hard: number;
+  };
+}
+
+// ── Site Config ──────────────────────────────────────────────────
+export interface NavLink {
+  label: string;
+  href: string;
+  icon?: string;
+}
+
+export interface SocialLink {
+  label: string;
+  url: string;
+  icon: string;
 }
 
 export interface SiteConfig {

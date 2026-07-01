@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
+import { motion, useAnimation } from "framer-motion";
 import { prefersReducedMotion } from "@/lib/utils";
 
 const certificates = [
@@ -38,56 +38,34 @@ const certificates = [
 
 export function CertificationGallery() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<gsap.core.Tween | null>(null);
-  const reducedMotion = useRef(false);
+  const controls = useAnimation();
+  const reducedMotion = prefersReducedMotion();
 
   useEffect(() => {
-    reducedMotion.current = prefersReducedMotion();
+    if (!scrollRef.current || reducedMotion) return;
 
-    if (!scrollRef.current || reducedMotion.current) return;
-
+    const track = scrollRef.current;
     // Clone items for seamless infinite scroll
-    const items = scrollRef.current.querySelectorAll<HTMLElement>(".cert-item");
+    const items = track.querySelectorAll<HTMLElement>(".cert-item");
     items.forEach((item) => {
       const clone = item.cloneNode(true) as HTMLElement;
       clone.setAttribute("aria-hidden", "true");
-      // Cloned nodes don't get React event handlers — attach directly
-      clone.addEventListener("mouseenter", () => {
-        animationRef.current?.pause();
-        gsap.to(clone, { scale: 1.3, duration: 0.4, ease: "power2.out", zIndex: 10 });
-      });
-      clone.addEventListener("mouseleave", () => {
-        animationRef.current?.play();
-        gsap.to(clone, { scale: 1, duration: 0.4, ease: "power2.out", zIndex: 1 });
-      });
-      scrollRef.current?.appendChild(clone);
+      track.appendChild(clone);
     });
 
-    const scrollWidth = scrollRef.current.scrollWidth / 2;
+    const scrollWidth = track.scrollWidth / 2;
 
-    animationRef.current = gsap.to(scrollRef.current, {
+    controls.start({
       x: -scrollWidth,
-      duration: 30,
-      repeat: -1,
-      ease: "linear",
+      transition: {
+        duration: 30,
+        repeat: Infinity,
+        ease: "linear",
+      },
     });
 
-    return () => {
-      animationRef.current?.kill();
-    };
-  }, []);
-
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (reducedMotion.current) return;
-    animationRef.current?.pause();
-    gsap.to(e.currentTarget, { scale: 1.3, duration: 0.4, ease: "power2.out", zIndex: 10 });
-  };
-
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (reducedMotion.current) return;
-    animationRef.current?.play();
-    gsap.to(e.currentTarget, { scale: 1, duration: 0.4, ease: "power2.out", zIndex: 1 });
-  };
+    return () => controls.stop();
+  }, [controls, reducedMotion]);
 
   return (
     <section
@@ -109,11 +87,11 @@ export function CertificationGallery() {
         style={{ width: "fit-content" }}
       >
         {certificates.map((cert, idx) => (
-          <div
+          <motion.div
             key={idx}
             className="cert-item relative w-[70vw] h-[60vh] max-w-4xl shrink-0 rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-zinc-900"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
             <Image
               src={cert.src}
@@ -123,7 +101,7 @@ export function CertificationGallery() {
               className="object-contain p-4"
               loading={idx === 0 ? "eager" : "lazy"}
             />
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

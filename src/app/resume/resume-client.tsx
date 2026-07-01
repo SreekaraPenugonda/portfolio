@@ -13,7 +13,7 @@ import { siteConfig } from "@/lib/site-config";
 import { getSkillsByCategory } from "@/data/skills";
 import { projects } from "@/data/projects";
 import { achievements } from "@/data/achievements";
-import { experiences, education } from "@/data/experience";
+import { experiences, education, workExperience } from "@/data/experience";
 import { cn } from "@/lib/utils";
 
 // Inline GitHub SVG — lucide-react doesn't export Github/Linkedin
@@ -26,7 +26,7 @@ function GithubIcon({ size = 14 }: { size?: number }) {
 }
 
 // ── Skill category metadata ───────────────────────────────────────
-const CATEGORY_META: Record<string, { label: string; icon: React.ElementType; color: string }> = {
+const CATEGORY_META: Record<string, { label: string; icon: React.ComponentType<{ size?: number | string; className?: string }>; color: string }> = {
   languages: { label: "Languages",        icon: Code2,      color: "text-blue-500"   },
   frontend:  { label: "Frontend",         icon: Layers,     color: "text-purple-500" },
   backend:   { label: "Backend",          icon: Terminal,   color: "text-emerald-500"},
@@ -84,7 +84,7 @@ function SidebarNav({ active }: { active: string }) {
 
 // ── Section wrapper ───────────────────────────────────────────────
 function Section({ id, title, icon: Icon, children }: {
-  id: string; title: string; icon: React.ElementType; children: React.ReactNode;
+  id: string; title: string; icon: React.ComponentType<{ size?: number | string; className?: string }>; children: React.ReactNode;
 }) {
   return (
     <motion.section
@@ -178,7 +178,7 @@ export function ResumeClient() {
   }, []);
 
   const byCategory = getSkillsByCategory();
-  const workExp = experiences.filter((e) => e.type === "work" || e.type === "internship");
+  const workExp = workExperience;
 
   return (
     <div className="min-h-screen py-20 px-4 print:py-0 print:px-0">
@@ -452,13 +452,13 @@ export function ResumeClient() {
                         )}
                       </div>
                       <a
-                        href={p.github}
+                        href={p.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={`GitHub — ${p.title}`}
+                        aria-label={`Source — ${p.title}`}
                         className="shrink-0 rounded-lg border border-zinc-200 p-1.5 text-zinc-500 transition hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-700 dark:hover:text-zinc-50"
                       >
-                        <Github size={15} />
+                        <Code2 size={15} />
                       </a>
                     </div>
                     <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">

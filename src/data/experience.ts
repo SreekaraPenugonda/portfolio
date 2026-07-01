@@ -1,13 +1,4 @@
-export interface Experience {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  period: string;
-  description: string[];
-  technologies: string[];
-  type: "work" | "internship" | "education";
-}
+import { Experience } from "@/types";
 
 export const experiences: Experience[] = [
   {
@@ -67,4 +58,5 @@ export const experiences: Experience[] = [
 ];
 
 export const education = experiences.filter(exp => exp.type === "education");
-export const certifications = experiences.filter(exp => exp.type === "internship");
+export const workExperience = experiences.filter(exp => exp.type === "work" || exp.type === "internship");
+export const certifications = experiences.filter(exp => exp.type === "internship" || exp.type === "education");

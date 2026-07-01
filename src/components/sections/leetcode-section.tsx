@@ -8,20 +8,10 @@ import { Code, Trophy, Target, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getLeetCodeStats } from "@/lib/api/leetcode";
-
-interface LeetCodeApiStats {
-  totalSolved: number;
-  totalProblems: number;
-  ranking: number;
-  byDifficulty: {
-    easy: number;
-    medium: number;
-    hard: number;
-  };
-}
+import type { LeetCodeApiResponse } from "@/types";
 
 export function LeetCodeSection() {
-  const [stats, setStats] = useState<LeetCodeApiStats | null>(null);
+  const [stats, setStats] = useState<LeetCodeApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -73,21 +63,21 @@ export function LeetCodeSection() {
   const difficulties = [
     {
       label: "Easy",
-      solved: leetcode.byDifficulty?.easy || leetcode.easy || 120,
+      solved: leetcode.byDifficulty?.easy ?? 120,
       total: 200,
       color: "bg-emerald-500",
       bg: "bg-emerald-100 dark:bg-emerald-950",
     },
     {
       label: "Medium",
-      solved: leetcode.byDifficulty?.medium || leetcode.medium || 140,
+      solved: leetcode.byDifficulty?.medium ?? 140,
       total: 400,
       color: "bg-amber-500",
       bg: "bg-amber-100 dark:bg-amber-950",
     },
     {
       label: "Hard",
-      solved: leetcode.byDifficulty?.hard || leetcode.hard || 26,
+      solved: leetcode.byDifficulty?.hard ?? 26,
       total: 200,
       color: "bg-red-500",
       bg: "bg-red-100 dark:bg-red-950",

@@ -1,11 +1,11 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useScroll, useVelocity } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, Download, Send, Code2 } from "lucide-react";
+import { ArrowDown, Download, Send, Code2, Sparkles, Zap, Globe } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 
 // ── Animated counter ──────────────────────────────────────────────
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
@@ -29,7 +29,7 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
     const step = (timestamp: number) => {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.floor(eased * to));
       if (progress < 1) requestAnimationFrame(step);
     };
@@ -42,10 +42,10 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 // ── Typing headline ───────────────────────────────────────────────
 const roles = [
   "Full-Stack Developer",
-  "Cloud Engineer",
-  "SIH 2024 Winner",
+  "Software Engineer",
+  "Python Programming",
   "Problem Solver",
-  "AWS Intern",
+  "UI/UX Designing",
 ];
 
 function TypingRole() {
@@ -75,6 +75,94 @@ function TypingRole() {
       {displayed}
       <span className="animate-pulse">|</span>
     </span>
+  );
+}
+
+// ── Particle system ───────────────────────────────────────────────
+function Particle({ x, y, size, duration, delay, color }: {
+  x: string; y: string; size: number; duration: number; delay: number; color: string;
+}) {
+  return (
+    <motion.div
+      className="absolute rounded-full pointer-events-none"
+      style={{
+        left: x,
+        top: y,
+        width: size,
+        height: size,
+        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+        filter: "blur(1px)",
+      }}
+      animate={{
+        y: [0, -30, -60],
+        x: [0, Math.random() * 20 - 10, Math.random() * 40 - 20],
+        opacity: [0, 0.8, 0],
+        scale: [0, 1, 0.5],
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "easeOut",
+      }}
+    />
+  );
+}
+
+// ── Energy ring ───────────────────────────────────────────────────
+function EnergyRing({ delay, duration, size, color }: {
+  delay: number; duration: number; size: number; color: string;
+}) {
+  return (
+    <motion.div
+      className="absolute rounded-full pointer-events-none"
+      style={{
+        width: size,
+        height: size,
+        border: `1px solid ${color}`,
+        boxShadow: `0 0 20px ${color}40, inset 0 0 20px ${color}20`,
+      }}
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{
+        scale: [0.8, 1.2, 1.5],
+        opacity: [0.6, 0.3, 0],
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "easeOut",
+      }}
+    />
+  );
+}
+
+// ── Floating orbs ─────────────────────────────────────────────────
+function FloatingOrb({ x, y, size, color, duration, delay }: {
+  x: string; y: string; size: number; color: string; duration: number; delay: number;
+}) {
+  return (
+    <motion.div
+      className="absolute rounded-full pointer-events-none blur-2xl"
+      style={{
+        left: x,
+        top: y,
+        width: size,
+        height: size,
+        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+      }}
+      animate={{
+        y: [0, -20, 0],
+        x: [0, 15, 0],
+        scale: [1, 1.1, 1],
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    />
   );
 }
 
@@ -109,13 +197,13 @@ function TiltPhoto() {
       <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-emerald-500/20 blur-2xl" />
 
       {/* Photo */}
-      <div className="relative h-[420px] w-[360px] overflow-hidden rounded-[2rem] border border-zinc-200/60 shadow-2xl dark:border-zinc-700/50">
+      <div className="relative h-[520px] w-[460px] overflow-hidden rounded-[2rem] border border-zinc-200/60 shadow-2xl dark:border-zinc-700/50">
         <Image
           src="/images/image.png"
           alt="Sreekara Penugonda — Full-Stack Developer & AWS Intern"
           fill
           priority
-          sizes="360px"
+          sizes="420px"
           className="object-cover"
         />
         {/* Subtle gradient overlay for text contrast */}
@@ -131,7 +219,7 @@ function TiltPhoto() {
         >
           <span className="text-lg">🏆</span>
           <div>
-            <p className="text-[11px] font-bold text-zinc-900 dark:text-zinc-50 leading-tight">SIH 2024 Winner</p>
+            <p className="text-[11px] font-bold text-zinc-900 dark:text-zinc-50 leading-tight">Project Expo 2025</p>
             <p className="text-[9px] text-zinc-500 dark:text-zinc-400">Smart India Hackathon</p>
           </div>
         </motion.div>
@@ -146,8 +234,8 @@ function TiltPhoto() {
         >
           <span className="text-lg">☁️</span>
           <div>
-            <p className="text-[11px] font-bold text-zinc-900 dark:text-zinc-50 leading-tight">AWS Intern</p>
-            <p className="text-[9px] text-zinc-500 dark:text-zinc-400">SkillCraft Technology</p>
+            <p className="text-[11px] font-bold text-zinc-900 dark:text-zinc-50 leading-tight">Team Lead | Scrum</p>
+            <p className="text-[9px] text-zinc-500 dark:text-zinc-400">Vignan's University</p>
           </div>
         </motion.div>
       </div>
@@ -157,9 +245,36 @@ function TiltPhoto() {
 
 // ── Main Hero ─────────────────────────────────────────────────────
 export function Hero() {
+  const particles = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < 30; i++) {
+      arr.push({
+        id: i,
+        x: `${Math.random() * 100}%`,
+        y: `${Math.random() * 100}%`,
+        size: Math.random() * 3 + 1,
+        duration: Math.random() * 4 + 3,
+        delay: Math.random() * 2,
+        color: ["#3b82f6", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b"][Math.floor(Math.random() * 5)],
+      });
+    }
+    return arr;
+  }, []);
+
+  const orbs = useMemo(() => [
+    { x: "10%", y: "20%", size: 300, color: "rgba(59,130,246,0.15)", duration: 8, delay: 0 },
+    { x: "80%", y: "60%", size: 400, color: "rgba(139,92,246,0.12)", duration: 10, delay: 1 },
+    { x: "50%", y: "80%", size: 350, color: "rgba(6,182,212,0.1)", duration: 9, delay: 2 },
+  ], []);
+
+  const rings = useMemo(() => [
+    { delay: 0, duration: 4, size: 500, color: "rgba(59,130,246,0.3)" },
+    { delay: 1.5, duration: 5, size: 600, color: "rgba(139,92,246,0.2)" },
+    { delay: 3, duration: 6, size: 700, color: "rgba(6,182,212,0.15)" },
+  ], []);
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center px-4 py-24 overflow-hidden">
-
       {/* Background — layered gradients */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(99,102,241,0.12),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(99,102,241,0.18),transparent)]" />
@@ -169,11 +284,46 @@ export function Hero() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.025)_1px,transparent_1px)] bg-[size:60px_60px] dark:[background:linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] dark:bg-[size:60px_60px]" />
       </div>
 
-      <div className="mx-auto max-w-6xl w-full flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
+      {/* ── Sci-fi effects ─────────────────────────────────────── */}
+      {/* Floating orbs */}
+      {orbs.map((orb, i) => (
+        <FloatingOrb key={i} {...orb} />
+      ))}
 
+      {/* Energy rings */}
+      {rings.map((ring, i) => (
+        <div key={i} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+          <EnergyRing {...ring} />
+        </div>
+      ))}
+
+      {/* Particles */}
+      {particles.map((p) => (
+        <Particle key={p.id} {...p} />
+      ))}
+
+      {/* Light rays */}
+      <div className="absolute inset-0 -z-5 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-0 left-1/4 w-[1px] h-full bg-gradient-to-b from-transparent via-blue-500/20 to-transparent"
+          animate={{ opacity: [0, 0.5, 0] }}
+          transition={{ duration: 3, repeat: Infinity, delay: 0 }}
+        />
+        <motion.div
+          className="absolute top-0 left-1/2 w-[1px] h-full bg-gradient-to-b from-transparent via-purple-500/20 to-transparent"
+          animate={{ opacity: [0, 0.5, 0] }}
+          transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+        />
+        <motion.div
+          className="absolute top-0 left-3/4 w-[1px] h-full bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent"
+          animate={{ opacity: [0, 0.5, 0] }}
+          transition={{ duration: 3.5, repeat: Infinity, delay: 2 }}
+        />
+      </div>
+
+      <div className="mx-auto max-w-6xl w-full flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20 relative z-10">
         {/* ── Left — Text ──────────────────────────────────────── */}
         <div className="flex-1 text-center lg:text-left">
-
           {/* Status pill */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -220,7 +370,7 @@ export function Hero() {
             transition={{ delay: 0.35, duration: 0.5 }}
             className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 lg:mx-0"
           >
-            B.Tech CSE student at Vignan&apos;s University who{" "}
+            B.Tech CSE student at Vignan's University who{" "}
             <strong className="font-semibold text-zinc-800 dark:text-zinc-200">
               won Smart India Hackathon 2024
             </strong>
