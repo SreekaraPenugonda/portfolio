@@ -9,8 +9,19 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getLeetCodeStats } from "@/lib/api/leetcode";
 
+interface LeetCodeApiStats {
+  totalSolved: number;
+  totalProblems: number;
+  ranking: number;
+  byDifficulty: {
+    easy: number;
+    medium: number;
+    hard: number;
+  };
+}
+
 export function LeetCodeSection() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<LeetCodeApiStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

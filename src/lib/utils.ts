@@ -34,3 +34,12 @@ export function readingTime(text: string): number {
   const words = text.split(/\s+/).length;
   return Math.ceil(words / wordsPerMinute);
 }
+
+/**
+ * Returns true if the user has requested reduced motion.
+ * Safe to call on the server (returns false) and on the client.
+ */
+export function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}

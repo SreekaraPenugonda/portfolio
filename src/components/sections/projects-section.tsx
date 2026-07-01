@@ -27,7 +27,7 @@ export function ProjectsSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
-              <Link href={`/projects/${project.id}`}>
+              <Link href={`/projects/${project.slug}`}>
                 <div className="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 transition-all hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 sm:p-8">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex-1">
@@ -47,13 +47,13 @@ export function ProjectsSection() {
                     </div>
                     <div className="flex items-center gap-2">
                       {project.live && (
-                        <span className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50">
+                        <span
+                          className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
+                          aria-label="Live demo"
+                        >
                           <ExternalLink size={18} />
                         </span>
                       )}
-                      <span className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50">
-                        <ExternalLink size={18} />
-                      </span>
                       <ArrowRight
                         size={18}
                         className="text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-50"

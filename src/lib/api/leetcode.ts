@@ -1,53 +1,45 @@
+/**
+ * LeetCode stats helper.
+ *
+ * LeetCode's public GraphQL API blocks server-side requests (no CSRF token).
+ * We use the community-maintained alfa-leetcode-api as a reliable proxy,
+ * with a fallback to null so the UI falls back to siteConfig static data.
+ */
 export async function getLeetCodeStats(username: string) {
   try {
-    // Using LeetCode's GraphQL API
-    const query = `
-      query getUserProfile($username: String!) {
-        matchedUser(username: $username) {
-          submitStats: submitStatsGlobal {
-            acSubmissionNum {
-              difficulty
-              count
-            }
-          }
-          profile {
-            ranking
-            reputation
-          }
-        }
+    // Community-maintained open API that proxies LeetCode stats
+    const response = await fetch(
+      `https://alfa-leetcode-api.onrender.com/${encodeURIComponent(username)}/solved`,
+      {
+        next: { revalidate: 3600 }, // Cache for 1 hour
+        signal: AbortSignal.timeout(8000), // Don't hang indefinitely
       }
-    `;
+    );
 
-    const response = await fetch('https://leetcode.com/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        variables: { username }
-      }),
-      next: { revalidate: 3600 } // Cache for 1 hour
-    });
+    if (!response.ok) throw new Error(`LeetCode proxy responded ${response.status}`);
 
-    if (!response.ok) throw new Error('LeetCode API error');
-    
     const data = await response.json();
-    const user = data.data.matchedUser;
-    
-    if (!user) return null;
 
-    const stats = user.submitStats.acSubmissionNum;
-    
+    if (!data || typeof data.solvedProblem !== "number") {
+      return null;
+    }
+
     return {
-      ranking: user.profile.ranking,
-      totalSolved: stats[0].count,
-      easy: stats[1].count,
-      medium: stats[2].count,
-      hard: stats[3].count,
+      totalSolved: data.solvedProblem,
+      totalProblems: 3400, // approximate LeetCode total
+      ranking: data.ranking ?? 0,
+      easy: data.easySolved ?? 0,
+      medium: data.mediumSolved ?? 0,
+      hard: data.hardSolved ?? 0,
+      byDifficulty: {
+        easy: data.easySolved ?? 0,
+        medium: data.mediumSolved ?? 0,
+        hard: data.hardSolved ?? 0,
+      },
     };
   } catch (error) {
-    console.error('Error fetching LeetCode stats:', error);
+    // Non-critical — the UI falls back to siteConfig static data
+    console.error("LeetCode stats unavailable:", error instanceof Error ? error.message : error);
     return null;
   }
 }

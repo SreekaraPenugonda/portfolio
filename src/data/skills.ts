@@ -2,46 +2,44 @@ import { Skill } from "@/types";
 
 export const skills: Skill[] = [
   // Languages
-  { name: "TypeScript", category: "languages", level: 95 },
-  { name: "JavaScript", category: "languages", level: 95 },
-  { name: "Python", category: "languages", level: 85 },
-  { name: "Java", category: "languages", level: 70 },
-  { name: "SQL", category: "languages", level: 80 },
-  { name: "HTML/CSS", category: "languages", level: 95 },
+  { name: "Python",       category: "languages", level: 85 },
+  { name: "JavaScript",   category: "languages", level: 90 },
+  { name: "TypeScript",   category: "languages", level: 88 },
+  { name: "C",            category: "languages", level: 75 },
+  { name: "SQL",          category: "languages", level: 80 },
+  { name: "HTML/CSS",     category: "languages", level: 92 },
 
   // Frontend
-  { name: "React", category: "frontend", level: 95 },
-  { name: "Next.js", category: "frontend", level: 90 },
-  { name: "Tailwind CSS", category: "frontend", level: 90 },
-  { name: "Framer Motion", category: "frontend", level: 80 },
-  { name: "Redux", category: "frontend", level: 85 },
-  { name: "React Native", category: "frontend", level: 75 },
+  { name: "React",        category: "frontend",  level: 88 },
+  { name: "Next.js",      category: "frontend",  level: 82 },
+  { name: "Tailwind CSS", category: "frontend",  level: 85 },
+  { name: "Redux",        category: "frontend",  level: 72 },
 
   // Backend
-  { name: "Node.js", category: "backend", level: 90 },
-  { name: "Express", category: "backend", level: 85 },
-  { name: "FastAPI", category: "backend", level: 75 },
-  { name: "REST APIs", category: "backend", level: 95 },
-  { name: "GraphQL", category: "backend", level: 70 },
+  { name: "Node.js",      category: "backend",   level: 80 },
+  { name: "Flask",        category: "backend",   level: 85 },
+  { name: "Express",      category: "backend",   level: 75 },
+  { name: "REST APIs",    category: "backend",   level: 88 },
 
   // Database
-  { name: "MongoDB", category: "database", level: 85 },
-  { name: "PostgreSQL", category: "database", level: 80 },
-  { name: "Redis", category: "database", level: 70 },
-  { name: "Firebase", category: "database", level: 75 },
+  { name: "MongoDB",      category: "database",  level: 80 },
+  { name: "MySQL",        category: "database",  level: 78 },
+  { name: "Firebase",     category: "database",  level: 72 },
+  { name: "SQLite",       category: "database",  level: 75 },
 
-  // DevOps
-  { name: "Docker", category: "devops", level: 80 },
-  { name: "Kubernetes", category: "devops", level: 65 },
-  { name: "AWS", category: "devops", level: 75 },
-  { name: "CI/CD", category: "devops", level: 85 },
-  { name: "Git", category: "devops", level: 90 },
+  // DevOps / Cloud
+  { name: "AWS",          category: "devops",    level: 78 },
+  { name: "Docker",       category: "devops",    level: 75 },
+  { name: "Kubernetes",   category: "devops",    level: 65 },
+  { name: "Git",          category: "devops",    level: 88 },
+  { name: "Render",       category: "devops",    level: 80 },
 
   // Tools
-  { name: "VS Code", category: "tools", level: 95 },
-  { name: "Figma", category: "tools", level: 70 },
-  { name: "Postman", category: "tools", level: 85 },
-  { name: "Linux", category: "tools", level: 80 },
+  { name: "VS Code",      category: "tools",     level: 95 },
+  { name: "Postman",      category: "tools",     level: 82 },
+  { name: "GitHub",       category: "tools",     level: 88 },
+  { name: "Linux",        category: "tools",     level: 72 },
+  { name: "Figma",        category: "tools",     level: 65 },
 ];
 
 export function getSkillsByCategory(): Record<string, Skill[]> {

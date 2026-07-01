@@ -139,6 +139,9 @@ export interface SiteConfig {
   description: string;
   url: string;
   ogImage: string;
+  phone?: string;
+  location?: string;
+  resumeLastUpdated?: string;
   links: {
     github: string;
     linkedin: string;

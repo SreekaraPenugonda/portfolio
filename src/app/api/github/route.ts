@@ -6,16 +6,18 @@ export async function GET(request: Request) {
   const username = searchParams.get("username") || "SreekaraPenugonda";
 
   try {
-    const [stats, repos] = await Promise.all([
+    const [stats, repoData] = await Promise.all([
       getGitHubStats(username),
-      getGitHubRepos(username)
+      getGitHubRepos(username),
     ]);
 
     return NextResponse.json({
       stats,
-      repos,
+      repos: repoData.topRepos,
+      topLanguages: repoData.topLanguages,
+      totalStars: repoData.totalStars,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch GitHub data" },
       { status: 500 }

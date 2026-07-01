@@ -3,12 +3,12 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { getProjectById } from "@/data/projects";
+import { getProjectBySlug } from "@/data/projects";
 import { AnimatedCaseStudy } from "@/components/sections/projects/animated-case-study";
 
 export default function ProjectDetailPage() {
   const params = useParams();
-  const project = getProjectById(params.slug as string);
+  const project = getProjectBySlug(params.slug as string);
 
   if (!project) {
     return (

@@ -115,3 +115,51 @@ html {
     cursor: auto !important;
   }
 }
+
+/* ── Print styles for /resume page ─────────────────────────────── */
+@media print {
+  /* Hide everything that's not the resume content */
+  header, footer, nav,
+  .print\:hidden { display: none !important; }
+
+  /* Reset page layout */
+  body {
+    background: #ffffff !important;
+    color: #18181b !important;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  /* Full width, no padding */
+  .mx-auto { max-width: 100% !important; }
+  .px-4, .px-6, .px-8 { padding-left: 0 !important; padding-right: 0 !important; }
+  .py-20 { padding-top: 8pt !important; padding-bottom: 0 !important; }
+
+  /* Remove dark bg classes */
+  .dark\:bg-zinc-900\/50,
+  .dark\:bg-zinc-900,
+  .dark\:bg-zinc-950 { background: transparent !important; }
+
+  /* Borders print cleanly */
+  .rounded-xl, .rounded-2xl { border-radius: 4pt !important; }
+
+  /* Remove shadows */
+  .shadow-2xl, .shadow-lg, .shadow-md { box-shadow: none !important; }
+
+  /* Sidebar hidden on print */
+  .xl\:flex.flex-col.gap-1 { display: none !important; }
+
+  /* Ensure full width for content */
+  .flex-1 { flex: 1 1 100% !important; }
+
+  /* Page breaks */
+  section { page-break-inside: avoid; }
+
+  /* Reduce animation */
+  * { animation: none !important; transition: none !important; }
+
+  @page {
+    size: A4;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+}

@@ -2,35 +2,40 @@ import { ProjectCategory } from "@/types";
 
 export interface Project {
   id: string;
+  slug: string;
   title: string;
+  tagline?: string;
   description: string;
   longDescription: string;
+  category?: ProjectCategory;
   technologies: string[];
-  github: string;
+  image?: string;
+  images?: string[];
   live?: string;
+  github: string;
   featured: boolean;
   date: string;
-  tagline?: string;
-  category?: ProjectCategory;
-  image?: string;
   highlights?: string[];
   architecture?: string;
+  keyLearnings?: string[];
 }
 
 export const projects: Project[] = [
   {
     id: "1",
+    slug: "grocery-flask-app",
     title: "Grocery Based Flask Application",
     tagline: "OTP authentication system for kirana shops",
-    description: "OTP authentication system for kirana shops with CRUD operations",
-    longDescription: "A website-based OTP authentication system to make CRUD operations for stocks, images, services, and bulk collections. Facilitating kirana shop logins to websites without having to remember their credentials.",
+    description: "Reduced login friction for 50+ kirana shops by eliminating password dependency via OTP auth",
+    longDescription: "A website-based OTP authentication system enabling kirana shop owners to manage their entire inventory without remembering credentials. Built CRUD operations for stocks, images, services, and bulk collections — streamlining operations for multi-vendor environments.",
     category: "backend" as ProjectCategory,
     technologies: ["Python", "Flask", "SQLite", "HTML", "CSS", "JavaScript"],
     image: "/projects/grocery-app.jpg",
     highlights: [
-      "OTP-based authentication for secure access",
-      "CRUD operations for stocks and bulk collections",
-      "Multi-vendor product management system",
+      "OTP-based login eliminating credential-remembering for 50+ shop owners",
+      "Full CRUD for stocks, images, services and bulk collections",
+      "Multi-vendor product management across wide range of companies",
+      "Secure session management with Flask and SQLite backend",
     ],
     github: "https://github.com/SreekaraPenugonda/grocery.git",
     featured: true,
@@ -38,17 +43,19 @@ export const projects: Project[] = [
   },
   {
     id: "2",
+    slug: "typescript-command-center",
     title: "TypeScript Command Center",
-    tagline: "Productivity platform with voice commands",
-    description: "Productivity platform with voice commands for students and professionals",
-    longDescription: "A website and desktop app built for students and professionals to manage daily tasks. Features CRUD operations for tasks using physical typing or voice commands. Works as both desktop app and website on Render deployed service.",
+    tagline: "Voice-controlled productivity platform — web + desktop",
+    description: "Cross-platform task manager with voice commands deployed on Render — zero-install web + desktop access",
+    longDescription: "A productivity platform for students and professionals featuring voice command support for hands-free task management. Deployed as both a web app on Render and a native desktop app — users get the same experience across platforms with real-time task sync.",
     category: "full-stack" as ProjectCategory,
-    technologies: ["TypeScript", "React", "Kubernetes", "Docker", "Render"],
+    technologies: ["TypeScript", "React", "Docker", "Kubernetes", "Render"],
     image: "/projects/command-center.jpg",
     highlights: [
-      "Voice command support for hands-free operation",
-      "Cross-platform desktop and web deployment",
-      "Real-time task synchronization",
+      "Voice + keyboard CRUD for daily tasks — hands-free option for accessibility",
+      "Containerised with Docker and orchestrated via Kubernetes",
+      "Deployed on Render — accessible as both web app and desktop application",
+      "Real-time task synchronisation across devices",
     ],
     github: "https://github.com/SreekaraPenugonda/focusos-your-smart-task-hub.git",
     featured: true,
@@ -56,17 +63,19 @@ export const projects: Project[] = [
   },
   {
     id: "3",
+    slug: "quo-rion",
     title: "QUO-RION",
-    tagline: "QR code analytics for retail and marketing",
-    description: "QR code analytics platform tracking retail and marketing statistics",
-    longDescription: "Daily and weekly updated statistics tracking the number of QR generators in big retail and marketing places like D-Mart and Reliance.",
+    tagline: "QR analytics platform for D-Mart, Reliance & retail chains",
+    description: "Tracked QR scan analytics daily/weekly across 3+ retail chains including D-Mart and Reliance",
+    longDescription: "A real-time QR code analytics platform tracking generation and scan statistics for major Indian retail chains. Delivers daily and weekly insights on QR usage patterns across D-Mart, Reliance, and marketing environments.",
     category: "full-stack" as ProjectCategory,
     technologies: ["JavaScript", "HTML", "CSS", "Flask", "API"],
     image: "/projects/quo-rion.jpg",
     highlights: [
-      "Real-time QR code generation tracking",
-      "Daily and weekly analytics updates",
-      "Integration with major retail chains",
+      "Analytics for D-Mart and Reliance QR campaigns — daily & weekly reports",
+      "Real-time QR generation tracking via REST API integration",
+      "Dashboard showing scan trends across multiple retail locations",
+      "Flask backend serving live statistics to the frontend",
     ],
     github: "https://github.com/SreekaraPenugonda/QUORION.git",
     featured: true,
@@ -87,10 +96,16 @@ export function getFeaturedProjects() {
   return projects.filter(project => project.featured);
 }
 
+export function getProjectBySlug(slug: string) {
+  return projects.find(project => project.slug === slug);
+}
+
+/** @deprecated Use getProjectBySlug instead */
 export function getProjectById(id: string) {
-  return projects.find(project => project.id === id);
+  return projects.find(project => project.id === id || project.slug === id);
 }
 
 export function getProjectCategories() {
-  return categories;
+  const used = new Set(projects.map(p => p.category).filter(Boolean));
+  return Array.from(used) as string[];
 }

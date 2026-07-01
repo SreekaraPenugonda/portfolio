@@ -1,20 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site-config";
-import { Send, Check, Globe, Briefcase, MessageCircle, Mail } from "lucide-react";
+import { Send, Check, AlertCircle, Globe, Briefcase, MessageCircle, Mail } from "lucide-react";
 
 export function ContactSection() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // In production, this would send to an API
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    setStatus("submitting");
+    setErrorMessage("");
+
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      subject: formData.get("subject") as string,
+      message: formData.get("message") as string,
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to send message");
+      }
+
+      setStatus("success");
+      formRef.current?.reset();
+      // Reset after 6 seconds
+      setTimeout(() => setStatus("idle"), 6000);
+    } catch (err) {
+      setStatus("error");
+      setErrorMessage(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setTimeout(() => setStatus("idle"), 6000);
+    }
   };
 
   return (
@@ -26,29 +57,40 @@ export function ContactSection() {
         />
 
         <div className="mx-auto max-w-2xl">
-          {submitted ? (
+          {status === "success" ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="rounded-xl border border-emerald-200 bg-emerald-50 p-8 text-center dark:border-emerald-900 dark:bg-emerald-950/50"
             >
-              <Check className="mx-auto h-12 w-12 text-emerald-500" />
+              <Check className="mx-auto h-12 w-12 text-emerald-500" aria-hidden="true" />
               <h3 className="mt-4 text-lg font-semibold text-emerald-900 dark:text-emerald-100">
                 Message Sent!
               </h3>
               <p className="mt-2 text-sm text-emerald-700 dark:text-emerald-300">
-                Thanks for reaching out. I'll get back to you as soon as
-                possible.
+                Thanks for reaching out. I&apos;ll get back to you as soon as possible.
               </p>
             </motion.div>
           ) : (
             <motion.form
+              ref={formRef}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               onSubmit={handleSubmit}
               className="space-y-4"
+              noValidate
             >
+              {status === "error" && (
+                <div
+                  role="alert"
+                  className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300"
+                >
+                  <AlertCircle size={16} aria-hidden="true" />
+                  {errorMessage}
+                </div>
+              )}
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label
@@ -59,8 +101,10 @@ export function ContactSection() {
                   </label>
                   <input
                     id="name"
+                    name="name"
                     type="text"
                     required
+                    autoComplete="name"
                     className="mt-1 block w-full rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 transition-colors focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400/20 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:border-zinc-600"
                     placeholder="Your name"
                   />
@@ -74,8 +118,10 @@ export function ContactSection() {
                   </label>
                   <input
                     id="email"
+                    name="email"
                     type="email"
                     required
+                    autoComplete="email"
                     className="mt-1 block w-full rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 transition-colors focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400/20 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:border-zinc-600"
                     placeholder="your@email.com"
                   />
@@ -90,6 +136,7 @@ export function ContactSection() {
                 </label>
                 <input
                   id="subject"
+                  name="subject"
                   type="text"
                   required
                   className="mt-1 block w-full rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 transition-colors focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400/20 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:border-zinc-600"
@@ -105,15 +152,30 @@ export function ContactSection() {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   required
                   rows={5}
+                  maxLength={5000}
                   className="mt-1 block w-full rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 transition-colors focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400/20 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 dark:focus:border-zinc-600"
                   placeholder="Your message..."
                 />
               </div>
-              <Button type="submit" className="w-full sm:w-auto">
-                <Send size={16} className="mr-2" />
-                Send Message
+              <Button
+                type="submit"
+                className="w-full sm:w-auto"
+                disabled={status === "submitting"}
+              >
+                {status === "submitting" ? (
+                  <>
+                    <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send size={16} className="mr-2" />
+                    Send Message
+                  </>
+                )}
               </Button>
             </motion.form>
           )}

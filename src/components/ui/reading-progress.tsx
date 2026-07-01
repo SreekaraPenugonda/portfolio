@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 export function ReadingProgress() {
   const [progress, setProgress] = useState(0);
@@ -10,21 +9,24 @@ export function ReadingProgress() {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
+      if (docHeight <= 0) return;
+      const scrollPercent = Math.min((scrollTop / docHeight) * 100, 100);
       setProgress(scrollPercent);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 h-1 bg-zinc-900 dark:bg-white z-[100]"
+    <div
+      className="fixed top-0 left-0 h-1 bg-zinc-900 dark:bg-white z-[100] transition-[width] duration-100 ease-out"
       style={{ width: `${progress}%` }}
-      initial={{ scaleX: 0 }}
-      animate={{ scaleX: progress / 100 }}
-      transition={{ duration: 0.1 }}
+      role="progressbar"
+      aria-valuenow={Math.round(progress)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label="Reading progress"
     />
   );
 }

@@ -6,53 +6,61 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 export function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const cursorX = useMotionValue(0);
-  const cursorY = useMotionValue(0);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
 
   const springConfig = { damping: 25, stiffness: 700 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
+    // Safe to check window here — inside useEffect, only runs on client
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      setIsTouchDevice(true);
+      return;
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+      cursorX.set(e.clientX - 10);
+      cursorY.set(e.clientY - 10);
       setIsVisible(true);
     };
 
     const handleMouseLeave = () => setIsVisible(false);
     const handleMouseEnter = () => setIsVisible(true);
-
     const handleLinkHoverStart = () => setIsHovering(true);
     const handleLinkHoverEnd = () => setIsHovering(false);
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
 
-    // Add hover listeners to all interactive elements
-    const interactiveElements = document.querySelectorAll(
-      'a, button, input, textarea, [role="button"]'
-    );
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleLinkHoverStart);
-      el.addEventListener("mouseleave", handleLinkHoverEnd);
-    });
+    const addInteractiveListeners = () => {
+      const interactiveElements = document.querySelectorAll(
+        'a, button, input, textarea, [role="button"]'
+      );
+      interactiveElements.forEach((el) => {
+        el.addEventListener("mouseenter", handleLinkHoverStart);
+        el.addEventListener("mouseleave", handleLinkHoverEnd);
+      });
+      return interactiveElements;
+    };
+
+    const elements = addInteractiveListeners();
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
-      interactiveElements.forEach((el) => {
+      elements.forEach((el) => {
         el.removeEventListener("mouseenter", handleLinkHoverStart);
         el.removeEventListener("mouseleave", handleLinkHoverEnd);
       });
     };
   }, [cursorX, cursorY]);
 
-  if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
-    return null; // Hide on touch devices
-  }
+  if (isTouchDevice) return null;
 
   return (
     <>
@@ -62,8 +70,9 @@ export function CustomCursor() {
           x: cursorXSpring,
           y: cursorYSpring,
           opacity: isVisible ? 1 : 0,
-          scale: isHovering ? 2.5 : 1,
+          scale: isHovering ? 3.0 : 1,
         }}
+        aria-hidden="true"
       />
       <motion.div
         className="fixed top-0 left-0 w-1 h-1 rounded-full bg-zinc-900 dark:bg-white mix-blend-difference pointer-events-none z-[9999]"
@@ -72,6 +81,7 @@ export function CustomCursor() {
           y: cursorYSpring,
           opacity: isVisible ? 1 : 0,
         }}
+        aria-hidden="true"
       />
     </>
   );

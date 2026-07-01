@@ -20,7 +20,9 @@ export function ExperienceSection() {
           <div className="absolute left-4 top-0 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 md:left-8" />
 
           <div className="space-y-8">
-            {experiences.map((exp, idx) => (
+            {experiences
+              .filter((exp) => exp.type === "work" || exp.type === "internship")
+              .map((exp, idx) => (
               <motion.div
                 key={exp.id}
                 initial={{ opacity: 0, x: -20 }}
